@@ -1,12 +1,15 @@
 FROM php:8.2-apache
 
-# Enable mod_rewrite
+# Enable rewrite module
 RUN a2enmod rewrite
 
-# Copy files
+# Support dynamic PORT for Railway / Cloud hosts
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
+# Copy API files
 COPY api/ /var/www/html/
 
-# Expose port 80
+ENV PORT=80
 EXPOSE 80
 
 CMD ["apache2-foreground"]
