@@ -66,6 +66,23 @@ if (!$data) {
 // Remove third-party branding / internal keys from data
 unset($data['developer'], $data['notice'], $data['key'], $data['credits']);
 
+// Filter out @Dead_bans and third-party promo links/handles
+function clean_promo($val) {
+    if (is_string($val)) {
+        // Remove entire lines mentioning promo handles
+        $val = preg_replace('/^[^\r\n]*(@Dead_bans|t\.me\/Dead_bans|@Your_father_786k|t\.me\/Your_father_786k)[^\r\n]*(\r?\n)?/mi', '', $val);
+        // Remove inline mentions
+        $val = preg_replace('/(https?:\/\/)?(t\.me\/|@)Dead_bans\b/i', '', $val);
+        $val = preg_replace('/(https?:\/\/)?(t\.me\/|@)Your_father_786k\b/i', '', $val);
+        return preg_replace("/\n{3,}/", "\n\n", trim($val));
+    } elseif (is_array($val)) {
+        return array_map('clean_promo', $val);
+    }
+    return $val;
+}
+
+$data = clean_promo($data);
+
 // Clean API Output
 $output = [
     "success" => $data['success'] ?? true,

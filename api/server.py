@@ -7,6 +7,18 @@ from urllib.request import Request, urlopen
 
 PORT = int(os.environ.get("PORT", 8000))
 
+def clean_promo(val):
+    if isinstance(val, str):
+        val = re.sub(r'^[^\r\n]*(@Dead_bans|t\.me/Dead_bans|@Your_father_786k|t\.me/Your_father_786k)[^\r\n]*(\r?\n)?', '', val, flags=re.MULTILINE | re.IGNORECASE)
+        val = re.sub(r'(https?://)?(t\.me/|@)Dead_bans\b', '', val, flags=re.IGNORECASE)
+        val = re.sub(r'(https?://)?(t\.me/|@)Your_father_786k\b', '', val, flags=re.IGNORECASE)
+        return re.sub(r'\n{3,}', '\n\n', val).strip()
+    elif isinstance(val, dict):
+        return {k: clean_promo(v) for k, v in val.items()}
+    elif isinstance(val, list):
+        return [clean_promo(v) for v in val]
+    return val
+
 class ApiHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -52,6 +64,8 @@ class ApiHandler(BaseHTTPRequestHandler):
         # Clean third-party branding
         for key in ['developer', 'notice', 'key', 'credits']:
             data.pop(key, None)
+
+        data = clean_promo(data)
 
         output = {
             "success": data.get("success", True),
