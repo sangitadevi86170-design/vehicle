@@ -1,5 +1,9 @@
 FROM php:8.2-cli-alpine
 
+# Install libcurl and PHP curl extension
+RUN apk add --no-cache curl libcurl curl-dev \
+    && docker-php-ext-install curl
+
 WORKDIR /app
 
 COPY api/ .
