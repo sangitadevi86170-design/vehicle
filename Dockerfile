@@ -2,6 +2,6 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY api/ .
+COPY . .
 
-CMD ["python3", "-u", "server.py"]
+CMD ["python3", "-u", "api/server.py"]
