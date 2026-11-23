@@ -11,9 +11,7 @@ $vehicleNum = $_GET['vehicle'] ?? $_GET['q'] ?? $_GET['query'] ?? $_GET['rc'] ??
 if (!$vehicleNum) {
     echo json_encode([
         "success" => false,
-        "message" => "Please provide a Vehicle Number (e.g. ?vehicle=UP70DN1860 or ?q=UP70DN1860)",
-        "credit" => "https://t.me/TOXIC_ADMINN",
-        "channel" => "https://t.me/botadminshere"
+        "message" => "Please provide a Vehicle Number (e.g. ?vehicle=UP70DN1860 or ?q=UP70DN1860)"
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     exit;
 }
@@ -44,8 +42,6 @@ if ($response === false || $httpCode !== 200) {
     echo json_encode([
         "success" => false,
         "message" => "Failed to fetch vehicle data from server",
-        "credit" => "https://t.me/TOXIC_ADMINN",
-        "channel" => "https://t.me/botadminshere",
         "query" => $vehicleNum
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     exit;
@@ -57,9 +53,7 @@ if (!$data) {
     echo json_encode([
         "success" => false,
         "message" => "No record found or invalid response format",
-        "raw_response" => $response,
-        "credit" => "https://t.me/TOXIC_ADMINN",
-        "channel" => "https://t.me/botadminshere"
+        "raw_response" => $response
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     exit;
 }
@@ -82,12 +76,11 @@ function clean_promo($val) {
 
 $data = clean_promo($data);
 
-// Clean API Output
+// Simple & Clean API Output
 $output = [
     "success" => $data['success'] ?? true,
-    "credit" => "https://t.me/TOXIC_ADMINN",
-    "channel" => "https://t.me/botadminshere",
     "query" => $vehicleNum,
+    "result" => $data['result'] ?? null,
     "data" => $data
 ];
 

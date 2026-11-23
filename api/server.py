@@ -36,9 +36,7 @@ class ApiHandler(BaseHTTPRequestHandler):
         if not vehicle:
             self._send_json(200, {
                 "success": False,
-                "message": "Please provide a Vehicle Number (e.g. ?vehicle=UP70DN1860 or ?q=UP70DN1860)",
-                "credit": "https://t.me/TOXIC_ADMINN",
-                "channel": "https://t.me/botadminshere"
+                "message": "Please provide a Vehicle Number (e.g. ?vehicle=UP70DN1860 or ?q=UP70DN1860)"
             })
             return
 
@@ -56,8 +54,6 @@ class ApiHandler(BaseHTTPRequestHandler):
             self._send_json(500, {
                 "success": False,
                 "message": f"Failed to fetch vehicle data: {str(e)}",
-                "credit": "https://t.me/TOXIC_ADMINN",
-                "channel": "https://t.me/botadminshere",
                 "query": clean_vehicle
             })
             return
@@ -68,11 +64,11 @@ class ApiHandler(BaseHTTPRequestHandler):
 
         data = clean_promo(data)
 
+        # Simple & Clean API Output
         output = {
             "success": data.get("success", True),
-            "credit": "https://t.me/TOXIC_ADMINN",
-            "channel": "https://t.me/botadminshere",
             "query": clean_vehicle,
+            "result": data.get("result"),
             "data": data
         }
 
